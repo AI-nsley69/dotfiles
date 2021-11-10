@@ -1,0 +1,24 @@
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+plug "robertmeta/plug.kak" noload
+plug "nesyamun/nord-kakoune" theme
+plug "silversquirl/kaklip"
+plug "andreyorst/kaktree" config %{
+        hook global WinSetOption filetype=kaktree %{
+                    remove-highlighter buffer/numbers
+                            remove-highlighter buffer/matching
+                                    remove-highlighter buffer/wrap
+                                            remove-highlighter buffer/show-whitespaces
+        }
+            kaktree-enable
+}
+
+colorscheme nord
+
+addhl global/ number-lines -separator ' ' -min-digits 3
+addhl global/ show-matching
+addhl global/ wrap -word -indent -marker '   ⮩  '
+
+hook global BufWritePre .* %{try format}
+hook global WinSetOption filetype=zig %{
+        set buffer formatcmd "zig fmt --stdin"
+}
